@@ -1,0 +1,3 @@
+{
+  "extends": ["@delement/stylelint-config-primary"]
+}
