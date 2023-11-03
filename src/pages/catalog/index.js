@@ -1,20 +1,25 @@
 import { getPage, meta, commonComponentProps } from "../../shared/lib/index.js";
+import { category } from "../../shared/api/variables.js";
+import { Breadcrumbs } from "../../shared/ui/breadcrumbs/index.js";
+
 import { Header } from "../../widgets/header/index.js";
+import { Filter } from "../../widgets/filter/index.js";
 import { Footer } from "../../widgets/footer/index.js";
 
 export default () => {
-    const { getCN } = { ...commonComponentProps };
+    const { getCN, extraClasses } = { ...commonComponentProps };
 
     return getPage({
-        title: "Главная",
+        title: "Каталог",
         content: `
-          ${Header()}
-           <main class="${getCN("main")}">
-                <div class="${getCN("container")}">
-                    // Контент ...
+            ${Header()}
+            <main class="${getCN("catalog")}">
+                <div class="${getCN(extraClasses.container)}">
+                    ${Breadcrumbs("Каталог")}
+                    ${Filter({ category: category })}
                 </div>               
             </main>    
-          ${Footer()}
+            ${Footer()}     
         `,
         meta: [
             meta({
@@ -27,5 +32,3 @@ export default () => {
         ]
     })
 }
-
-

@@ -3,7 +3,7 @@ import { getPage, meta } from "../../shared/lib/index.js";
 export default () => {
     return getPage({
         title: "About",
-        body: `
+        content: `
             <h1>О нас</h1>
             <br>
             <nav>

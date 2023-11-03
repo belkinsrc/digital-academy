@@ -1,11 +1,11 @@
-export default ({
-    type = "button",
-    className = "",
-    label = ""
-}) => {
-    return `
-        <button class="${className}" type="${type}">
-            ${label}
-        </button>
-    `;
+import { commonComponentProps, getAttrs } from "../../lib/index.js";
+
+export default (props) => {
+    const { label = "", extraClasses = {}, extraAttrs = {}, baseClass = "btn", getCN, children } = { ...commonComponentProps, ...props }
+    const getClassName = (elem, mod) => getCN(baseClass, elem, mod)
+
+    return `<button class="${getClassName("",  extraClasses)}" ${getAttrs(extraAttrs)}>
+                ${children || `<span class="${getClassName("label")}">${label}</span>` }
+            </button>
+            `
 }
