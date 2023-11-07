@@ -1,3 +1,3 @@
-import { AddToCart } from "./ui/AddToCart.js";
+import { AddToCart } from "./ui/AddToCart.js"
 
-export { AddToCart };
+export { AddToCart }

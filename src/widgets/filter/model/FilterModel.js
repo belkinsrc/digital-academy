@@ -1,6 +1,9 @@
 import { Card } from "../../../entities/card/index.js";
 import { AddToCart } from "../../../features/addToCart/index.js";
 
+import { createUrlBuilder } from "../../../shared/lib/index.js";
+import { instance } from "eslint-plugin-react/lib/util/lifecycleMethods.js";
+
 export default class FilterModel {
     static instance = null;
 
@@ -13,9 +16,11 @@ export default class FilterModel {
     constructor() {
         if (FilterModel.instance) return FilterModel.instance;
         FilterModel.instance = document.querySelector(FilterModel.selectors.instanceSelector);
-        FilterModel.registerEventDelegation(FilterModel.instance);
 
-        this.init();
+        if (FilterModel.instance) {
+            FilterModel.registerEventDelegation(FilterModel.instance);
+            this.init();
+        }
     }
 
     static registerEventDelegation(instance) {
@@ -47,8 +52,9 @@ export default class FilterModel {
                                 return container.innerHTML += Card({
                                     data: itemData,
                                     features: {
-                                        addToCart: AddToCart()
-                                    }
+                                        addToCart: AddToCart(itemData.idProduct)
+                                    },
+                                    extraClasses: { page: "catalog" }
                                 });
                             })
                         } catch (error) {
@@ -79,16 +85,17 @@ export default class FilterModel {
             return container.innerHTML += Card({
                 data: cardData,
                 features: {
-                    addToCart: AddToCart()
-                }
+                    addToCart: AddToCart(cardData.idProduct)
+                },
+                extraClasses: { page: "catalog" }
             })
         })
         document.querySelector(FilterModel.selectors.btnSelectors)
             .parentElement.classList.add("filter__btn_active");
     }
 
-    static async fetchProductCards(category) {
-        const url = FilterModel.createUrlBuilder("/cards")
+    static async fetchProductCards(category){
+        const url = createUrlBuilder("/cards")
             .addQueryParam("category", category)
             .build()
 
@@ -96,31 +103,5 @@ export default class FilterModel {
         if (response.ok) {
             return await response.json();
         }
-    }
-
-    static createUrlBuilder(baseURL) {
-        const url = new URL(baseURL, "http://localhost:5173");
-
-        const addPath = (path) => {
-            url.pathname += path;
-            return builder;
-        };
-
-        const addQueryParam = (key, value) => {
-            url.searchParams.set(key, value);
-            return builder;
-        };
-
-        const build = () => {
-            return url.toString();
-        };
-
-        const builder = {
-            addPath,
-            addQueryParam,
-            build,
-        };
-
-        return builder;
     }
 }

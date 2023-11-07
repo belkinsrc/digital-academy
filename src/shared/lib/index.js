@@ -11,7 +11,7 @@ export const getPage = ({ content = ``, title = ``, meta = [] }) => {
                 <script src="/src/app/main.js" defer type="module"></script>
             </head>
             <body>
-                <div class="${commonComponentProps.getCN("page", "", {})}">
+                <div class="${commonComponentProps.getCN("page")}">
                     ${content}
                 </div>                             
             </body>
@@ -23,12 +23,11 @@ export const commonComponentProps = {
     extraClasses: {
         title: "title",
         container: "container",
-        button: "button"
+        button: "button",
+        totalPrice: "total-price"
     },
     extraAttrs: {},
-    children: ``,
     getCN: (block = "", elem = "", mod = {}) => {
-        console.debug(block, elem, mod)
         return withNaming({
             n: "",
             e: "__",
@@ -60,9 +59,39 @@ export const meta = ({
     `;
 }
 
+export const createUrlBuilder = (baseURL = "") => {
+    const url = new URL(baseURL, "http://localhost:5173");
+
+    const addPath = (path) => {
+        url.pathname += path;
+        return builder;
+    };
+
+    const addQueryParam = (key, value) => {
+        url.searchParams.set(key, value);
+        return builder;
+    };
+
+    const build = () => {
+        return url.toString();
+    };
+
+    const builder = {
+        addPath,
+        addQueryParam,
+        build,
+    };
+
+    return builder;
+}
+
 export const filterCardsByCategory = (data, category) => {
     if (category === "all") {
         return data;
     }
     return data.filter((item) => item.category === category);
+}
+
+export const filterCardsById = (data, ids) => {
+    return data.filter((item) => ids.includes(item.idProduct));
 }

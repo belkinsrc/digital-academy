@@ -1,34 +1,37 @@
 import { getPage, meta, commonComponentProps } from "../../shared/lib/index.js";
-import { category } from "../../shared/api/variables.js";
 import { Breadcrumbs } from "../../shared/ui/breadcrumbs/index.js";
 
 import { Header } from "../../widgets/header/index.js";
-import { Filter } from "../../widgets/filter/index.js";
 import { Footer } from "../../widgets/footer/index.js";
+import { CartProducts } from "../../widgets/cartProducts/index.js";
+import { CheckoutPanel } from "../../widgets/checkoutPanel/index.js";
 
 export default () => {
     const { getCN, extraClasses } = { ...commonComponentProps };
 
-    const baseClass = "catalog";
+    const baseClass = "cart";
 
     const getClassName = (elem = "", mod = {}) => {
         return getCN(baseClass, elem, mod);
     }
 
     return getPage({
-        title: "Каталог",
+        title: "Корзина",
         content: `
             ${Header()}
             <main class="${getClassName()}">
                 <div class="${extraClasses.container}">
-                    ${Breadcrumbs("Каталог")}
+                    ${Breadcrumbs("Корзина")}
                     <h2 class="${extraClasses.title}">
-                        Каталог
+                        Корзина
                     </h2>
-                    ${Filter({ category: category })}
-                </div>               
+                    <div class="${getClassName("container")}">
+                        ${CartProducts()}
+                        ${CheckoutPanel()}
+                    </div>
+                </div>         
             </main>    
-            ${Footer()}     
+            ${Footer()}
         `,
         meta: [
             meta({

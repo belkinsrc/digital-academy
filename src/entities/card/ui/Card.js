@@ -1,16 +1,16 @@
 import { commonComponentProps } from "../../../shared/lib/index.js";
 
 export const Card = (props) => {
-    const { getCN, features, data } = { ...commonComponentProps, ...props };
+    const { data, features = {}, children = {}, extraClasses = {} } = { ...props };
 
     const baseClass = "card";
 
     const getClassName = (elem = "", mod = {}) =>  {
-        return getCN(baseClass, elem, mod);
+        return commonComponentProps.getCN(baseClass, elem, mod);
     }
 
     return `
-        <article class="${getClassName()}">
+        <article class="${getClassName("", extraClasses)}">
             <div class="${getClassName("image-wrapper")}">
                 <img src="${data.imageSrc}" alt="image">
             </div>
@@ -21,8 +21,9 @@ export const Card = (props) => {
                 <h3 class="${getClassName("title")}">
                     «${data.productName}»
                 </h3>               
-                ${ features.addToCart || "" }
+                ${ features.addToCart || children.courseInfo || "" }
             </div>
+            ${ features.deleteFromCart || ""}
         </article>
     `;
 }

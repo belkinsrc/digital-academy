@@ -23,6 +23,12 @@ h6 {
 }
 
 ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0;
     padding: 0;
 }
 
@@ -43,10 +49,19 @@ ul, li {
     line-height: 72px;
     color: #222222;
     font-weight: 700;
-    margin-bottom: 56px;
+    margin: 56px 0;
 }
 
 .catalog {
+    flex: 1 1 auto;
+}
+
+.cart {
+    flex: 1 1 auto;
+    margin-bottom: 120px;
+}
+
+.main {
     flex: 1 1 auto;
 }
 
@@ -67,7 +82,15 @@ ul, li {
     background-color: #094593;
 }
 
+.total-price {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #0B1014;
+}
+
 .breadcrumbs {
+    margin-top: 24px;
 }
 
 .breadcrumbs__list {
@@ -91,5 +114,11 @@ ul, li {
 .breadcrumbs__separator {
     display: inline-block;
     margin: 0 6px 0 9px;
+}
+
+.cart__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 

@@ -1,27 +1,82 @@
 .card {
+    position: relative;
     background-color: #F2F3F4;
     padding: 20px;
     border-radius: 12px;
-    max-width: 328px;
     display: flex;
+}
+
+.card--page-catalog {
+    max-width: 328px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 }
 
-.card__image-wrapper {
+.card--page-cart {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.card--page-catalog .card__image-wrapper {
     margin-bottom: 24px;
 }
 
+.card--page-cart .card__image-wrapper {
+    margin-right: 30px;
+    max-width: 188px;
+}
+
+.card--page-cart .card__image-wrapper img {
+    width: 100%;
+}
+
 .card__content {
-    margin-bottom: 4px;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
 }
 
 .card__title {
+    line-height: 28px;
+    color: #0B1014;
+}
+
+.card--page-catalog .card__title {
     margin-bottom: 24px;
     font-size: 20px;
+}
+
+.card--page-cart .card__title {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.card__course-info {
+    font-size: 18px;
+    font-weight: 600;
     line-height: 28px;
+    color: #0B1014;
+    display: grid;
+    gap: 5px;
+}
+
+.card__course-info span {
+    font-size: 22px;
+    line-height: 32px;
+    color: #1C6CD5;
+    margin-left: 8px;
+}
+
+.card__delete-from-cart {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    top: 20px;
+    right: 20px;
+}
+
+.card__delete-from-cart svg {
+    width: 100%;
 }
