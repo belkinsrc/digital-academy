@@ -2,9 +2,14 @@ import { getPage, meta, commonComponentProps } from "../../shared/lib/index.js";
 
 import { Header } from "../../widgets/header/index.js";
 import { Footer } from "../../widgets/footer/index.js";
+import { Slider } from "../../widgets/slider/index.js";
+import { AboutUs } from "../../widgets/aboutUs/index.js";
 
-export default () => {
-    const { getCN, extraClasses } = { ...commonComponentProps };
+export const Index = () => {
+    const {
+        getCN,
+        extraClasses = {}
+    } = { ...commonComponentProps };
 
     const baseClass = "main";
 
@@ -21,7 +26,8 @@ export default () => {
                     <h2 class="${extraClasses.title}">
                         Популярные товары
                     </h2>
-                    // Контент ...
+                    ${Slider()}
+                    ${AboutUs()}
                 </div>               
             </main>    
           ${Footer()}

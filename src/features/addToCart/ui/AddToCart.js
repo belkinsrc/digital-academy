@@ -1,7 +1,16 @@
 import { commonComponentProps } from "../../../shared/lib/index.js";
 
-export const AddToCart = (idProduct) => {
-    const { getCN, extraClasses } = { ...commonComponentProps };
+export const AddToCart = (props) => {
+    const {
+        getCN,
+        extraClasses = {}
+    } = { ...commonComponentProps };
+
+    const {
+        idProduct,
+        label = "В корзину",
+        active = false
+    } = { ...props };
 
     const baseClass = "add-to-cart";
 
@@ -11,9 +20,10 @@ export const AddToCart = (idProduct) => {
 
     return `
         <button class="${getClassName()} 
-                       ${getCN(extraClasses.button)}" 
+                       ${extraClasses.button}
+                       ${active ? "button_disabled" : ""}" 
                        data-add-to-cart="${idProduct}">
-            В корзину
+            ${label}
         </button>
     `;
 }

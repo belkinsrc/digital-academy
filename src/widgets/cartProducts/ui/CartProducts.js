@@ -8,8 +8,8 @@ export const CartProducts = () => {
     }
 
     return `
-        <section class="${getClassName()}">
-            <div class="${getClassName("container")}">
+        <section class="${getClassName()}" data-js-cart-products="">
+            <div class="${getClassName("container")}" data-js-cart-products-container="">
                 
             </div>
             <div class="${getClassName("continue-shopping")}">

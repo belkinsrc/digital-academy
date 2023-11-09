@@ -1,44 +1,60 @@
-import { createUrlBuilder } from "../../../shared/lib/index.js";
+import { getState } from "../../../shared/api/zustand.js";
+import { createUrlBuilder, commonComponentProps } from "../../../shared/lib/index.js";
 import { CourseInformation } from "../../../shared/ui/course-information/index.js";
 
-import { useCardStore } from "../../../features/addToCart/model/AddToCartModel.js";
 import { DeleteFromCart } from "../../../features/deleteFromCart/index.js";
 
 import { Card } from "../../../entities/card/index.js";
 
 export class CartProductsModel {
-    static cardsContainer = document.querySelector(".cart-products__container");
+    static instance;
+
+    static selectors = {
+        instanceSelector: "[data-js-cart-products]",
+        cardsContainer: "[data-js-cart-products-container]"
+    }
 
     constructor() {
-        if (CartProductsModel.cardsContainer) {
-            CartProductsModel.init();
+        this.node = document.querySelector(CartProductsModel.selectors.instanceSelector);
+        CartProductsModel.instance = this;
+
+        if (CartProductsModel.instance.node) {
+            this.renderProductCards();
         }
     }
 
-    static async init() {
-        const { getState } = useCardStore;
+    renderProductCards() {
+        (async () => {
+            const cardsContainer = this.node.querySelector(CartProductsModel.selectors.cardsContainer);
+            cardsContainer.innerHTML = "";
 
-        const productIds = getState().productArray;
+            const { productArray } = { ...getState() };
 
-        const data = await CartProductsModel.fetchProductCards(productIds);
+            const data = await this.fetchProductCards(productArray);
 
-        this.cardsContainer.innerHTML = "";
-
-        data.forEach((dataItem) => {
-            this.cardsContainer.innerHTML += Card({
-                data: dataItem,
-                features: {
-                    deleteFromCart: DeleteFromCart(dataItem.idProduct)
-                },
-                children: {
-                    courseInfo: CourseInformation("card")
-                },
-                extraClasses: { page: "cart" }
-            })
-        })
+            if (data.length === 0) {
+                cardsContainer.innerHTML =
+                    `<h2 class="${commonComponentProps.getCN("cart-products", "empty")}">
+                        Корзина пуста :(
+                    </h2>`;
+            } else {
+                data.forEach((dataItem) => {
+                    cardsContainer.innerHTML += Card({
+                        data: dataItem,
+                        features: {
+                            deleteFromCart: DeleteFromCart(dataItem.idProduct)
+                        },
+                        children: {
+                            courseInfo: CourseInformation("card")
+                        },
+                        extraClasses: { page: "cart" }
+                    })
+                })
+            }
+        })()
     }
 
-    static async fetchProductCards(productIds) {
+    async fetchProductCards(productIds) {
         const url = createUrlBuilder("/cart")
             .addQueryParam("productIds", productIds)
             .build()

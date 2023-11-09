@@ -1,7 +1,7 @@
-import { persist, createJSONStorage } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useCardStore = createStore(
+const useCardStore = createStore(
     persist(
         (set, get) => ({
             productArray: [],
@@ -20,17 +20,4 @@ export const useCardStore = createStore(
     )
 )
 
-export function init() {
-    setTimeout(() => {
-        const btns = document.querySelectorAll("[data-add-to-cart]");
-        const { getState } = useCardStore;
-        const addProduct = getState().addProduct;
-
-        btns.forEach(btn => {
-            const productId = btn.getAttribute("data-add-to-cart");
-            btn.addEventListener("click", () => {
-                addProduct(productId)
-            })
-        })
-    }, 300)
-}
+export const { getState } = useCardStore;

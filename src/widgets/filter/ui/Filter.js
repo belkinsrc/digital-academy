@@ -3,7 +3,7 @@ import { commonComponentProps } from "../../../shared/lib/index.js";
 export const Filter = (props) => {
     const {
         getCN,
-        category = []
+        categories = []
     } = { ...commonComponentProps, ...props };
 
     const baseClass = "filter";
@@ -16,16 +16,16 @@ export const Filter = (props) => {
         <section class="${getClassName()}" data-js-filter="">
             <div class="${getClassName("container")}">             
                 <div class="${getClassName("sidebar")}">
-                    ${category.map(item => {
+                    ${categories.map(category => {
                         return (
                             `<label class="${getClassName("btn")}">
-                               <input type="checkbox" value="" data-js-search-param=${item.category}>
-                               ${item.name}
+                               <input type="checkbox" data-js-search-param=${category.category}>
+                               ${category.name}
                             </label>`
                         )
                     }).join("")}
                 </div>  
-                <div class="${getClassName("cards")}">
+                <div class="${getClassName("cards")}" data-js-cards="">
                     
                 </div>             
            </div>         

@@ -1,18 +1,21 @@
-import HeaderModel from "../widgets/header/model/HeaderModel.js";
-import FilterModel from "../widgets/filter/model/FilterModel.js";
-
-import { init } from "../features/addToCart/model/AddToCartModel.js";
+import { FilterModel } from "../widgets/filter/model/FilterModel.js";
 import { CartProductsModel } from "../widgets/cartProducts/model/CartProductsModel.js";
-import { DeleteFromCartModel } from "../features/deleteFromCart/model/DeleteFromCartModel.js";
+import { CheckoutPanelModel } from "../widgets/checkoutPanel/model/CheckoutPanelModel.js";
+
+import { runDeleteFromCartFunctionality } from "../features/deleteFromCart/model/index.js";
+
+// import { SliderModel } from "../widgets/slider/model/SliderModel.js";
 
 const runApp = async () => {
     const runWidgets = async () => {
-        new HeaderModel();
         new FilterModel();
-        init();
         new CartProductsModel();
-        new DeleteFromCartModel();
+        new CheckoutPanelModel();
+        // new SliderModel()
         await Promise.all(Object.keys(import.meta.glob("../**/*.pcss", { "query": "?inline" })).map(path => import(`${path}`).then((module) => module?.default ?? module)))
+    }
+    const runFeatures = async () => {
+        runDeleteFromCartFunctionality();
     }
     switch (process.env.NODE_ENV) {
         case "development":
@@ -21,6 +24,7 @@ const runApp = async () => {
                     await worker.start().then(() => {
                         console.debug("App dev run")
                         runWidgets()
+                        runFeatures()
                     })
                 })
 

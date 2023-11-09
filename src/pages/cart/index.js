@@ -6,8 +6,11 @@ import { Footer } from "../../widgets/footer/index.js";
 import { CartProducts } from "../../widgets/cartProducts/index.js";
 import { CheckoutPanel } from "../../widgets/checkoutPanel/index.js";
 
-export default () => {
-    const { getCN, extraClasses } = { ...commonComponentProps };
+export const Cart = () => {
+    const {
+        getCN,
+        extraClasses = {}
+    } = { ...commonComponentProps };
 
     const baseClass = "cart";
 

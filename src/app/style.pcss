@@ -52,19 +52,6 @@ p {
     margin: 56px 0;
 }
 
-.catalog {
-    flex: 1 1 auto;
-}
-
-.cart {
-    flex: 1 1 auto;
-    margin-bottom: 120px;
-}
-
-.main {
-    flex: 1 1 auto;
-}
-
 .button {
     text-decoration: none;
     color: #fff; /* Белый текст */
@@ -78,6 +65,14 @@ p {
     border: none;
 }
 
+.button_disabled {
+    background-color: #D7E8FF;
+    color: #1C6CD5;
+    box-shadow: none;
+    cursor: default;
+    pointer-events: none;
+}
+
 .button:hover {
     background-color: #094593;
 }
@@ -87,38 +82,5 @@ p {
     font-weight: 700;
     line-height: 24px;
     color: #0B1014;
-}
-
-.breadcrumbs {
-    margin-top: 24px;
-}
-
-.breadcrumbs__list {
-    list-style: none;
-    display: flex;
-}
-
-.breadcrumbs__item {
-    color: #888888;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 24px;
-    cursor: default;
-}
-
-.breadcrumbs__link {
-    text-decoration: none;
-    color: #888888;
-}
-
-.breadcrumbs__separator {
-    display: inline-block;
-    margin: 0 6px 0 9px;
-}
-
-.cart__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
 }
 

@@ -1,7 +1,10 @@
 import { commonComponentProps } from "../../../shared/lib/index.js";
 
-export const CheckoutPanel = (props) => {
-    const { getCN, extraClasses } = { ...commonComponentProps, ...props };
+export const CheckoutPanel = () => {
+    const {
+        getCN,
+        extraClasses = {}
+    } = { ...commonComponentProps };
 
     const baseClass = "checkout-panel";
 
@@ -17,10 +20,10 @@ export const CheckoutPanel = (props) => {
                 </h3>
                 <div class="${getClassName("order-section")}">
                     <p class="${getClassName("product-count")}">
-                        3 товара
+                        Товары (0)
                     </p>
                     <p class="${extraClasses.totalPrice}">
-                        24 000 ₽
+                        0 ₽
                     </p>
                 </div>
                 <div class="${getClassName("promo-code-section")}">

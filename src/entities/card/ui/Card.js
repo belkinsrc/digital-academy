@@ -1,7 +1,12 @@
 import { commonComponentProps } from "../../../shared/lib/index.js";
 
 export const Card = (props) => {
-    const { data, features = {}, children = {}, extraClasses = {} } = { ...props };
+    const {
+        data,
+        features = {},
+        children = {},
+        extraClasses = {}
+    } = { ...props };
 
     const baseClass = "card";
 
@@ -21,9 +26,9 @@ export const Card = (props) => {
                 <h3 class="${getClassName("title")}">
                     «${data.productName}»
                 </h3>               
-                ${ features.addToCart || children.courseInfo || "" }
+                ${features.addToCart || children.courseInfo || ""}
             </div>
-            ${ features.deleteFromCart || ""}
+            ${features.deleteFromCart || ""}
         </article>
     `;
 }

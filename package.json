@@ -25,6 +25,7 @@
     "postcss-preset-env": "^9.1.4",
     "stylelint": "^15.10.3",
     "stylelint-config-standard": "^34.0.0",
+    "swiper": "^11.0.3",
     "vite": "^4.4.5",
     "vite-plugin-html": "^3.2.0",
     "zustand": "^4.4.6"
