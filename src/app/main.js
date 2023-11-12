@@ -1,17 +1,16 @@
 import { FilterModel } from "../widgets/filter/model/FilterModel.js";
 import { CartProductsModel } from "../widgets/cartProducts/model/CartProductsModel.js";
 import { CheckoutPanelModel } from "../widgets/checkoutPanel/model/CheckoutPanelModel.js";
+import { SliderModel } from "../widgets/slider/model/SliderModel.js";
 
 import { runDeleteFromCartFunctionality } from "../features/deleteFromCart/model/index.js";
-
-// import { SliderModel } from "../widgets/slider/model/SliderModel.js";
 
 const runApp = async () => {
     const runWidgets = async () => {
         new FilterModel();
         new CartProductsModel();
         new CheckoutPanelModel();
-        // new SliderModel()
+        new SliderModel()
         await Promise.all(Object.keys(import.meta.glob("../**/*.pcss", { "query": "?inline" })).map(path => import(`${path}`).then((module) => module?.default ?? module)))
     }
     const runFeatures = async () => {

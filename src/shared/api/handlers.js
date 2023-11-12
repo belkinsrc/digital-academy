@@ -3,6 +3,11 @@ import { http, HttpResponse } from "msw";
 import { data } from "./variables.js";
 
 export const handlers = [
+    http.get("/home/productCards", () => {
+        return HttpResponse.json(
+            getPopularProductCards(data)
+        );
+    }),
     http.get("/catalog/productCards", ({ request }) => {
         const url = new URL(request.url);
 
@@ -43,6 +48,10 @@ function getProductCardsByCategory(data, category) {
 
 function getProductCardsById(data, ids) {
     return data.filter(item => ids.includes(item.idProduct));
+}
+
+function getPopularProductCards(data) {
+    return data.filter(item => item.isPopular);
 }
 
 function getCheckoutInfo(data) {
