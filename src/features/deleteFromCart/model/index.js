@@ -1,6 +1,7 @@
 import { getState } from "../../../shared/api/zustand.js";
 
 import { CartProductsModel } from "../../../widgets/cartProducts/model/CartProductsModel.js";
+import { CheckoutPanelModel } from "../../../widgets/checkoutPanel/model/CheckoutPanelModel.js";
 
 export const runDeleteFromCartFunctionality = () => {
     const { deleteProduct } = { ...getState() };
@@ -17,7 +18,8 @@ export const runDeleteFromCartFunctionality = () => {
                 .getAttribute("data-delete-from-cart");
             deleteProduct(idProduct);
 
-            new CartProductsModel();
+            new CartProductsModel().renderProductCards();
+            new CheckoutPanelModel().renderOrderData();
         }
     })
 }

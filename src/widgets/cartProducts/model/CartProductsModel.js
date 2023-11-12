@@ -15,6 +15,10 @@ export class CartProductsModel {
     }
 
     constructor() {
+        if (CartProductsModel.instance) {
+            return CartProductsModel.instance;
+        }
+
         this.node = document.querySelector(CartProductsModel.selectors.instanceSelector);
         CartProductsModel.instance = this;
 
