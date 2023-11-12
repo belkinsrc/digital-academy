@@ -55,7 +55,7 @@ export class CartProductsModel {
     }
 
     async fetchProductCards(productIds) {
-        const url = createUrlBuilder("/cart")
+        const url = createUrlBuilder("/cart/productCards")
             .addQueryParam("productIds", productIds)
             .build()
 

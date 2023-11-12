@@ -84,14 +84,3 @@ export const createUrlBuilder = (baseURL = "") => {
 
     return builder;
 }
-
-export const filterCardsByCategory = (data, category) => {
-    if (category === "all") {
-        return data;
-    }
-    return data.filter((item) => item.category === category);
-}
-
-export const filterCardsById = (data, ids) => {
-    return data.filter((item) => ids.includes(item.idProduct));
-}

@@ -16,8 +16,6 @@ export class CheckoutPanelModel {
         }
 
         this.node = document.querySelector(CheckoutPanelModel.selectors.instanceSelector);
-        this.productCount = 0;
-        this.totalPrice = 0;
         CheckoutPanelModel.instance = this;
 
         if (CheckoutPanelModel.instance.node) {
@@ -26,34 +24,23 @@ export class CheckoutPanelModel {
     }
 
     renderOrderData() {
-        this.setOrderData();
-
-        setTimeout(() => {
+        (async () => {
             const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
             const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
 
-            totalPriceElements.forEach(elem => {
-                elem.textContent = `${this.totalPrice} ₽`;
-            })
-            productCount.textContent = `Товары (${this.productCount})`;
-        }, 100);
-    }
-
-    setOrderData() {
-        (async () => {
             const { productArray } = { ...getState() };
 
             const data = await this.fetchDataProductCards(productArray);
 
-            data.forEach(productData => {
-                this.productCount += 1;
-                this.totalPrice += productData.price;
+            totalPriceElements.forEach(elem => {
+                elem.textContent = `${data.totalPrice} ₽`;
             })
+            productCount.textContent = `Товары (${data.productCount})`;
         })()
     }
 
     async fetchDataProductCards(productIds) {
-        const url = createUrlBuilder("/cart")
+        const url = createUrlBuilder("/cart/checkoutInfo")
             .addQueryParam("productIds", productIds)
             .build()
 

@@ -110,7 +110,7 @@ export class FilterModel {
     }
 
     async fetchDataProductCards(category){
-        const url = createUrlBuilder("/cards")
+        const url = createUrlBuilder("/catalog/productCards")
             .addQueryParam("category", category)
             .build()
 

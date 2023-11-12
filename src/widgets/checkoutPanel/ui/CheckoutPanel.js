@@ -38,7 +38,7 @@ export const CheckoutPanel = () => {
                         Итоговая сумма
                     </p>
                     <p class="${extraClasses.totalPrice}">
-                        24 000 ₽
+                        0 ₽
                     </p>
                 </div>
                 <button type="submit" class="${getClassName("button")} ${extraClasses.button}">
