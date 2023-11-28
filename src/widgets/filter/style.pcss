@@ -1,0 +1,58 @@
+.filter {
+
+}
+
+.filter__container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.filter__sidebar {
+    max-width: 300px;
+    margin-right: 32px;
+}
+
+.filter__btn {
+    display: inline-block;
+    padding: 12px 24px 12px 24px; /* Задайте желаемый размер кнопки */
+    background-color: #D7E8FF;
+    color: #1C6CD5;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    font-family: "Proxima Nova";
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    margin: 4px 0 4px 0;
+    border-radius: 100px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.filter__btn:hover {
+    color: #FFFFFF;
+    background-color: #094593;
+}
+
+.filter__btn_active {
+    color: #FFFFFF;
+    background-color: #1C6CD5;
+    cursor: default;
+}
+
+.filter__btn_active:hover {
+    color: #FFFFFF;
+    background-color: #1C6CD5;
+}
+
+.filter__sidebar input {
+    display: none;
+}
+
+.filter__cards {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
