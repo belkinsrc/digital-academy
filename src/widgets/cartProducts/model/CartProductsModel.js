@@ -28,34 +28,33 @@ export class CartProductsModel {
     }
 
     renderProductCards() {
-        (async () => {
-            const cardsContainer = this.node.querySelector(CartProductsModel.selectors.cardsContainer);
-            cardsContainer.innerHTML = "";
+        const cardsContainer = this.node.querySelector(CartProductsModel.selectors.cardsContainer);
+        cardsContainer.innerHTML = "";
 
-            const { productArray } = { ...getState() };
+        const { productArray } = { ...getState() };
 
-            const data = await this.fetchProductCards(productArray);
-
-            if (data.length === 0) {
-                cardsContainer.innerHTML =
-                    `<h2 class="${commonComponentProps.getCN("cart-products", "empty")}">
-                        Корзина пуста :(
-                    </h2>`;
-            } else {
-                data.forEach((dataItem) => {
-                    cardsContainer.innerHTML += Card({
-                        data: dataItem,
-                        features: {
-                            deleteFromCart: DeleteFromCart(dataItem.idProduct)
-                        },
-                        children: {
-                            courseInfo: CourseInformation("card")
-                        },
-                        extraClasses: { page: "cart" }
+        this.fetchProductCards(productArray)
+            .then(data => {
+                if (data.length === 0) {
+                    cardsContainer.innerHTML =
+                        `<h2 class="${commonComponentProps.getCN("cart-products", "empty")}">
+                    Корзина пуста :(
+                </h2>`;
+                } else {
+                    data.forEach((dataItem) => {
+                        cardsContainer.innerHTML += Card({
+                            data: dataItem,
+                            features: {
+                                deleteFromCart: DeleteFromCart(dataItem.idProduct)
+                            },
+                            children: {
+                                courseInfo: CourseInformation("card")
+                            },
+                            extraClasses: { page: "cart" }
+                        })
                     })
-                })
-            }
-        })()
+                }
+            })
     }
 
     async fetchProductCards(productIds) {
@@ -63,9 +62,13 @@ export class CartProductsModel {
             .addQueryParam("productIds", productIds)
             .build()
 
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error("Произошла ошибка: " + error);
         }
     }
 }

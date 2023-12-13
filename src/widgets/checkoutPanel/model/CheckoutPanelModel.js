@@ -24,19 +24,18 @@ export class CheckoutPanelModel {
     }
 
     renderOrderData() {
-        (async () => {
-            const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
-            const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
+        const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
+        const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
 
-            const { productArray } = { ...getState() };
+        const { productArray } = { ...getState() };
 
-            const data = await this.fetchDataProductCards(productArray);
-
-            totalPriceElements.forEach(elem => {
-                elem.textContent = `${data.totalPrice} ₽`;
+        this.fetchDataProductCards(productArray)
+            .then(data => {
+                totalPriceElements.forEach(elem => {
+                    elem.textContent = `${data.totalPrice} ₽`;
+                })
+                productCount.textContent = `Товары (${data.productCount})`;
             })
-            productCount.textContent = `Товары (${data.productCount})`;
-        })()
     }
 
     async fetchDataProductCards(productIds) {
@@ -44,9 +43,14 @@ export class CheckoutPanelModel {
             .addQueryParam("productIds", productIds)
             .build()
 
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error("Произошла ошибка: ", error);
         }
+
     }
 }

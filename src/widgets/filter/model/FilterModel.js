@@ -57,6 +57,7 @@ export class FilterModel {
 
     init() {
         this.registerEventDelegation(this.node);
+
         this.renderProductCardsByCategory("all");
 
         const allCoursesBtn = this.node.querySelector(FilterModel.selectors.btnSelector);
@@ -70,13 +71,11 @@ export class FilterModel {
     }
 
     renderProductCardsByCategory(category) {
-        (async () => {
-            try {
-                const cardsContainer = this.node.querySelector(FilterModel.selectors.cardsSelector);
-                cardsContainer.innerHTML = "";
+        const cardsContainer = this.node.querySelector(FilterModel.selectors.cardsSelector);
+        cardsContainer.innerHTML = "";
 
-                const data = await this.fetchDataProductCards(category);
-
+        this.fetchDataProductCards(category)
+            .then(data => {
                 data.forEach(itemData => {
                     const addedToCartProps = () => {
                         const { productArray } = { ...getState() };
@@ -91,7 +90,7 @@ export class FilterModel {
                         return null;
                     }
 
-                    return cardsContainer.innerHTML += Card({
+                    cardsContainer.innerHTML += Card({
                         data: itemData,
                         features: {
                             addToCart: AddToCart(addedToCartProps(itemData) || {
@@ -103,10 +102,7 @@ export class FilterModel {
                         extraClasses: { page: "catalog" }
                     });
                 })
-            } catch (error) {
-                console.error("Произошла ошибка:", error);
-            }
-        })();
+            })
     }
 
     async fetchDataProductCards(category){
@@ -114,9 +110,13 @@ export class FilterModel {
             .addQueryParam("category", category)
             .build()
 
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error("Произошла ошибка: ", error)
         }
     }
 }
