@@ -4,7 +4,7 @@ import { createUrlBuilder } from "../../../shared/lib/index.js";
 import { Card } from "../../../entities/card/index.js";
 
 import { AddToCart } from "../../../features/addToCart/index.js";
-import { runAddToCartFunctionality } from "../../../features/addToCart/model/index.js";
+import { AddToCartFunctionality } from "../../../features/addToCart/model/index.js";
 
 export class FilterModel {
     static instance = null;
@@ -42,7 +42,8 @@ export class FilterModel {
                 this.renderProductCardsByCategory(category);
 
                 setTimeout(() => {
-                    runAddToCartFunctionality();
+                    new AddToCartFunctionality()
+                        .run();
                 }, 300);
 
                 if (FilterModel.activeCategoryBtn) {
@@ -66,7 +67,8 @@ export class FilterModel {
         FilterModel.activeCategoryBtn = allCoursesBtn;
 
         setTimeout(() => {
-            runAddToCartFunctionality();
+            new AddToCartFunctionality()
+                .run();
         }, 300);
     }
 

@@ -7,7 +7,7 @@ import { createUrlBuilder } from "../../../shared/lib/index.js";
 import { Card } from "../../../entities/card/index.js";
 
 import { AddToCart } from "../../../features/addToCart/index.js";
-import { runAddToCartFunctionality } from "../../../features/addToCart/model/index.js";
+import { AddToCartFunctionality } from "../../../features/addToCart/model/index.js";
 
 export class SliderModel {
     static instance;
@@ -74,7 +74,8 @@ export class SliderModel {
                     swiperWrapper.append(swiperSlide);
                     this.swiper.update();
             })
-            runAddToCartFunctionality();
+            new AddToCartFunctionality()
+                .run();
         })
     }
 
