@@ -38,11 +38,11 @@ export class CartProductsModel {
                 if (data.length === 0) {
                     cardsContainer.innerHTML =
                         `<h2 class="${commonComponentProps.getCN("cart-products", "empty")}">
-                    Корзина пуста :(
-                </h2>`;
+                            Корзина пуста :(
+                        </h2>`;
                 } else {
-                    data.forEach((dataItem) => {
-                        cardsContainer.innerHTML += Card({
+                    cardsContainer.innerHTML =
+                        data.map(dataItem => Card({
                             data: dataItem,
                             features: {
                                 deleteFromCart: DeleteFromCart(dataItem.idProduct)
@@ -52,7 +52,7 @@ export class CartProductsModel {
                             },
                             extraClasses: { page: "cart" }
                         })
-                    })
+                    ).join("");
                 }
             })
     }

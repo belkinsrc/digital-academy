@@ -7,7 +7,8 @@ export class CheckoutPanelModel {
     static selectors = {
         instanceSelector: ".checkout-panel",
         productCountSelector: ".checkout-panel__product-count",
-        totalPriceSelector: ".total-price"
+        totalPriceSelector: ".total-price",
+        checkoutButton: "[data-checkout-btn]"
     }
 
     constructor() {
@@ -30,13 +31,27 @@ export class CheckoutPanelModel {
         const { productArray } = { ...getState() };
 
         this.fetchDataProductCards(productArray)
-            .then(data => {
+            .then(checkoutInfo => {
+                if (checkoutInfo.productCount <= 0) {
+                    const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
+                    checkoutBtn.classList.add("button_disabled");
+                }
+                // this.onClickCheckout();
                 totalPriceElements.forEach(elem => {
-                    elem.textContent = `${data.totalPrice} ₽`;
+                    elem.textContent = `${checkoutInfo.totalPrice} ₽`;
                 })
-                productCount.textContent = `Товары (${data.productCount})`;
+                productCount.textContent = `Товары (${checkoutInfo.productCount})`;
             })
+            .catch(error => console.error("Произошла ошибка: " + error));
     }
+
+    // onClickCheckout() {
+    //     const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
+    //     checkoutBtn.addEventListener("click", (event) => {
+    //         event.preventDefault();
+    //         console.log("click");
+    //     });
+    // }
 
     async fetchDataProductCards(productIds) {
         const url = createUrlBuilder("/cart/checkoutInfo")
@@ -49,7 +64,7 @@ export class CheckoutPanelModel {
                 return await response.json();
             }
         } catch (error) {
-            console.error("Произошла ошибка: ", error);
+            console.error("Произошла ошибка: " + error);
         }
 
     }

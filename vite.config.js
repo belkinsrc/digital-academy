@@ -4,6 +4,7 @@ import { createHtmlPlugin } from "vite-plugin-html";
 import { Index } from "./src/pages/index/index.js";
 import { Catalog } from "./src/pages/catalog/index.js";
 import { Cart } from "./src/pages/cart/index.js";
+import { Thanks } from "./src/pages/thanks/index.js";
 
 const pages = [
     {
@@ -17,6 +18,10 @@ const pages = [
     {
         name: "cart",
         content: Cart()
+    },
+    {
+        name: "thanks",
+        content: Thanks()
     }
 ]
 

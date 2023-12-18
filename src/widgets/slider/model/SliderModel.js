@@ -74,8 +74,7 @@ export class SliderModel {
                     swiperWrapper.append(swiperSlide);
                     this.swiper.update();
             })
-            new AddToCartFunctionality()
-                .run();
+            new AddToCartFunctionality().run();
         })
     }
 

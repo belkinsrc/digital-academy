@@ -1,8 +1,6 @@
 import { getState } from "../../../shared/api/zustand.js";
 import { createUrlBuilder } from "../../../shared/lib/index.js";
-
 import { Card } from "../../../entities/card/index.js";
-
 import { AddToCart } from "../../../features/addToCart/index.js";
 import { AddToCartFunctionality } from "../../../features/addToCart/model/index.js";
 
@@ -17,6 +15,8 @@ export class FilterModel {
 
     static activeCategoryBtn = null;
 
+    static ADD_TO_CART_DELAY = 300;
+
     constructor() {
         if (FilterModel.instance) {
             return FilterModel.instance;
@@ -30,30 +30,31 @@ export class FilterModel {
     }
 
     registerEventDelegation(instance) {
-        instance.addEventListener("change", (event) => {
-            const target = event.target;
+        instance.addEventListener("change", this.handleFilterChange.bind(this));
+    }
 
-            if (target && target.closest(FilterModel.selectors.btnSelector)) {
+    handleFilterChange(event) {
+        const clickedElement = event.target;
 
-                if (target.parentElement.classList.contains("filter__btn_active")) {
-                    return;
-                }
-                const category = target.getAttribute("data-js-search-param");
-                this.renderProductCardsByCategory(category);
-
-                setTimeout(() => {
-                    new AddToCartFunctionality()
-                        .run();
-                }, 300);
-
-                if (FilterModel.activeCategoryBtn) {
-                    markAsInactive(FilterModel.activeCategoryBtn);
-                }
-                markAsActive(target);
-
-                FilterModel.activeCategoryBtn = target;
+        if (clickedElement && clickedElement.closest(FilterModel.selectors.btnSelector)) {
+            if (clickedElement.parentElement.classList.contains("filter__btn_active")) {
+                return;
             }
-        });
+
+            const category = clickedElement.getAttribute("data-js-search-param");
+            this.renderProductCardsByCategory(category);
+
+            setTimeout(() => {
+                this.runAddToCartFunctionality();
+            }, FilterModel.ADD_TO_CART_DELAY);
+
+            if (FilterModel.activeCategoryBtn) {
+                this.markAsInactive(FilterModel.activeCategoryBtn);
+            }
+            this.markAsActive(clickedElement);
+
+            FilterModel.activeCategoryBtn = clickedElement;
+        }
     }
 
     init() {
@@ -62,14 +63,13 @@ export class FilterModel {
         this.renderProductCardsByCategory("all");
 
         const allCoursesBtn = this.node.querySelector(FilterModel.selectors.btnSelector);
-        markAsActive(allCoursesBtn);
+        this.markAsActive(allCoursesBtn);
 
         FilterModel.activeCategoryBtn = allCoursesBtn;
 
         setTimeout(() => {
-            new AddToCartFunctionality()
-                .run();
-        }, 300);
+            this.runAddToCartFunctionality();
+        }, FilterModel.ADD_TO_CART_DELAY);
     }
 
     renderProductCardsByCategory(category) {
@@ -79,38 +79,44 @@ export class FilterModel {
         this.fetchDataProductCards(category)
             .then(data => {
                 data.forEach(itemData => {
-                    const addedToCartProps = () => {
-                        const { productArray } = { ...getState() };
-
-                        if (productArray.includes(itemData.idProduct.toString())) {
-                            return {
-                                idProduct: itemData.idProduct,
-                                active: true,
-                                label: "Уже в корзине"
-                            }
-                        }
-                        return null;
-                    }
+                    const addedToCartProps = this.getAddedToCartProps(itemData);
 
                     cardsContainer.innerHTML += Card({
                         data: itemData,
                         features: {
-                            addToCart: AddToCart(addedToCartProps(itemData) || {
-                                idProduct: itemData.idProduct,
-                                active: false,
-                                label: "В корзину"
-                            })
+                            addToCart: AddToCart(addedToCartProps || this.getDefaultAddToCartProps(itemData))
                         },
                         extraClasses: { page: "catalog" }
                     });
-                })
-            })
+                });
+            });
     }
 
-    async fetchDataProductCards(category){
+    getAddedToCartProps(itemData) {
+        const { productArray } = { ...getState() };
+
+        if (productArray.includes(itemData.idProduct.toString())) {
+            return {
+                idProduct: itemData.idProduct,
+                active: true,
+                label: "Уже в корзине"
+            };
+        }
+        return null;
+    }
+
+    getDefaultAddToCartProps(itemData) {
+        return {
+            idProduct: itemData.idProduct,
+            active: false,
+            label: "В корзину"
+        };
+    }
+
+    async fetchDataProductCards(category) {
         const url = createUrlBuilder("/catalog/productCards")
             .addQueryParam("category", category)
-            .build()
+            .build();
 
         try {
             const response = await fetch(url);
@@ -118,18 +124,23 @@ export class FilterModel {
                 return await response.json();
             }
         } catch (error) {
-            console.error("Произошла ошибка: ", error)
+            console.error("Произошла ошибка: ", error);
         }
+    }
+
+    runAddToCartFunctionality() {
+        new AddToCartFunctionality().run();
+    }
+
+    markAsActive(btn) {
+        btn.parentElement.classList.add("filter__btn_active");
+        btn.parentElement.setAttribute("disabled", "true");
+    }
+
+    markAsInactive(btn) {
+        btn.parentElement.classList.remove("filter__btn_active");
+        btn.parentElement.removeAttribute("disabled");
     }
 }
 
-function markAsActive(btn) {
-    btn.parentElement.classList.add("filter__btn_active");
-    btn.parentElement.setAttribute("disabled", "true");
-}
-
-function markAsInactive(btn) {
-    btn.parentElement.classList.remove("filter__btn_active");
-    btn.parentElement.removeAttribute("disabled");
-}
 

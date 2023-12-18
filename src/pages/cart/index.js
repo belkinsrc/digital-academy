@@ -25,7 +25,7 @@ export const Cart = () => {
             <main class="${getClassName()}">
                 <div class="${extraClasses.container}">
                     ${Breadcrumbs("Корзина")}
-                    <h2 class="${extraClasses.title}">
+                    <h2 class="${getClassName("title")} ${extraClasses.title}">
                         Корзина
                     </h2>
                     <div class="${getClassName("container")}">

@@ -25,7 +25,7 @@ export const Catalog = () => {
             <main class="${getClassName()}">
                 <div class="${extraClasses.container}">
                     ${Breadcrumbs("Каталог")}
-                    <h2 class="${extraClasses.title}">
+                    <h2 class="${getClassName("title")} ${extraClasses.title}">
                         Каталог
                     </h2>
                     ${Filter({ categories })}
