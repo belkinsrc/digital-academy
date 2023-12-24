@@ -21,6 +21,7 @@ export class CheckoutPanelModel {
 
         if (CheckoutPanelModel.instance.node) {
             this.renderOrderData();
+            this.onClickCheckout();
         }
     }
 
@@ -28,7 +29,7 @@ export class CheckoutPanelModel {
         const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
         const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
 
-        const { productArray } = { ...getState() };
+        const { productArray } = getState();
 
         this.fetchDataProductCards(productArray)
             .then(checkoutInfo => {
@@ -36,7 +37,7 @@ export class CheckoutPanelModel {
                     const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
                     checkoutBtn.classList.add("button_disabled");
                 }
-                // this.onClickCheckout();
+
                 totalPriceElements.forEach(elem => {
                     elem.textContent = `${checkoutInfo.totalPrice} ₽`;
                 })
@@ -45,13 +46,13 @@ export class CheckoutPanelModel {
             .catch(error => console.error("Произошла ошибка: " + error));
     }
 
-    // onClickCheckout() {
-    //     const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
-    //     checkoutBtn.addEventListener("click", (event) => {
-    //         event.preventDefault();
-    //         console.log("click");
-    //     });
-    // }
+    onClickCheckout() {
+        const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
+        checkoutBtn.addEventListener("click", () => {
+            const { clearStore } = getState();
+            clearStore();
+        });
+    }
 
     async fetchDataProductCards(productIds) {
         const url = createUrlBuilder("/cart/checkoutInfo")

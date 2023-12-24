@@ -31,7 +31,7 @@ export class CartProductsModel {
         const cardsContainer = this.node.querySelector(CartProductsModel.selectors.cardsContainer);
         cardsContainer.innerHTML = "";
 
-        const { productArray } = { ...getState() };
+        const { productArray } = getState();
 
         this.fetchProductCards(productArray)
             .then(data => {

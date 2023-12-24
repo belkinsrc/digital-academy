@@ -93,7 +93,7 @@ export class FilterModel {
     }
 
     getAddedToCartProps(itemData) {
-        const { productArray } = { ...getState() };
+        const { productArray } = getState();
 
         if (productArray.includes(itemData.idProduct.toString())) {
             return {

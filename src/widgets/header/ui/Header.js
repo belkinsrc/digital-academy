@@ -17,7 +17,7 @@ export const Header = () => {
             <div class="${extraClasses.container}">
                 <nav class="${getClassName("nav")}">
                     <a href="index.html" class="${getClassName("logo")}">
-                       <img src="./public/images/logo.svg" alt="Логотип сайта">
+                       <img src="/images/logo.svg" alt="Логотип сайта">
                     </a>
                     <ul class="${getClassName("list")}">
                         <li class="${getClassName("item")}">

@@ -11,7 +11,7 @@ export class AddToCartFunctionality {
     }
 
     run() {
-        const { addProduct, productArray }  = { ...getState() };
+        const { addProduct, productArray }  = getState();
 
         this.addToCartButtons.forEach((btn) => {
             const productId = btn.getAttribute("data-add-to-cart");
