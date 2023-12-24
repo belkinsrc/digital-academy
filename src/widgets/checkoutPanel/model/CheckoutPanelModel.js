@@ -7,7 +7,8 @@ export class CheckoutPanelModel {
     static selectors = {
         instanceSelector: ".checkout-panel",
         productCountSelector: ".checkout-panel__product-count",
-        totalPriceSelector: ".total-price"
+        totalPriceSelector: ".total-price",
+        checkoutButton: "[data-checkout-btn]"
     }
 
     constructor() {
@@ -20,23 +21,37 @@ export class CheckoutPanelModel {
 
         if (CheckoutPanelModel.instance.node) {
             this.renderOrderData();
+            this.onClickCheckout();
         }
     }
 
     renderOrderData() {
-        (async () => {
-            const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
-            const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
+        const productCount = this.node.querySelector(CheckoutPanelModel.selectors.productCountSelector);
+        const totalPriceElements = this.node.querySelectorAll(CheckoutPanelModel.selectors.totalPriceSelector);
 
-            const { productArray } = { ...getState() };
+        const { productArray } = getState();
 
-            const data = await this.fetchDataProductCards(productArray);
+        this.fetchDataProductCards(productArray)
+            .then(checkoutInfo => {
+                if (checkoutInfo.productCount <= 0) {
+                    const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
+                    checkoutBtn.classList.add("button_disabled");
+                }
 
-            totalPriceElements.forEach(elem => {
-                elem.textContent = `${data.totalPrice} ₽`;
+                totalPriceElements.forEach(elem => {
+                    elem.textContent = `${checkoutInfo.totalPrice} ₽`;
+                })
+                productCount.textContent = `Товары (${checkoutInfo.productCount})`;
             })
-            productCount.textContent = `Товары (${data.productCount})`;
-        })()
+            .catch(error => console.error("Произошла ошибка: " + error));
+    }
+
+    onClickCheckout() {
+        const checkoutBtn = document.querySelector(CheckoutPanelModel.selectors.checkoutButton);
+        checkoutBtn.addEventListener("click", () => {
+            const { clearStore } = getState();
+            clearStore();
+        });
     }
 
     async fetchDataProductCards(productIds) {
@@ -44,9 +59,14 @@ export class CheckoutPanelModel {
             .addQueryParam("productIds", productIds)
             .build()
 
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error("Произошла ошибка: " + error);
         }
+
     }
 }

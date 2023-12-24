@@ -12,12 +12,16 @@ const useCardStore = createStore(
             deleteProduct: (productId) => {
                 const updatedArray = get().productArray.filter(id => id !== productId);
                 set({ productArray: updatedArray });
+            },
+            clearStore: () => {
+                const emptyArray = get().productArray = [];
+                set({ productArray: emptyArray });
             }
         }), {
             name: "product-storage",
             storage: createJSONStorage(() => localStorage),
         }
     )
-)
+);
 
 export const { getState } = useCardStore;

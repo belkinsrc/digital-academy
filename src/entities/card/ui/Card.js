@@ -6,7 +6,7 @@ export const Card = (props) => {
         features = {},
         children = {},
         extraClasses = {}
-    } = { ...props };
+    } = props;
 
     const baseClass = "card";
 

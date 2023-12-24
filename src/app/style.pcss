@@ -39,9 +39,11 @@ p {
 }
 
 .container {
+    box-sizing: content-box;
     position: relative;
     max-width: 1408px;
     margin: auto;
+    padding: 0 20px;
 }
 
 .title {
@@ -50,7 +52,6 @@ p {
     line-height: 72px;
     color: #222222;
     font-weight: 700;
-    margin: 56px 0;
 }
 
 .button {
@@ -58,7 +59,7 @@ p {
     color: #fff; /* Белый текст */
     background-color: #1C6CD5; /* Синий фон */
     padding: 12px 31px;
-    border-radius: 5px;
+    border-radius: 10px;
     font-weight: 700;
     transition: background-color 0.3s;
     box-shadow: -3px 3px 15px 0 #00000040;

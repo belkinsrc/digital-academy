@@ -35,7 +35,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "Backend-разработчик",
         category: "backend",
-        imageSrc: "../../../../public/images/image3.png",
+        imageSrc: "/images/image3.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -49,7 +49,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "Frontend-разработчик",
         category: "frontend",
-        imageSrc: "../../../../public/images/image3.png",
+        imageSrc: "/images/image3.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -63,7 +63,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "Android-разработчик",
         category: "mobile",
-        imageSrc: "../../../../public/images/image1.png",
+        imageSrc: "/images/image1.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -77,7 +77,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "IOS-разработчик",
         category: "mobile",
-        imageSrc: "../../../../public/images/image1.png",
+        imageSrc: "/images/image1.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -91,7 +91,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "Управление разработкой",
         category: "management",
-        imageSrc: "../../../../public/images/image2.png",
+        imageSrc: "/images/image2.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -105,7 +105,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "IT-инфрастуктура",
         category: "infrastructure",
-        imageSrc: "../../../../public/images/image2.png",
+        imageSrc: "/images/image2.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"
@@ -119,7 +119,7 @@ export const data = [
         label: "Бесплатный офлайн курс",
         productName: "Анализ данных",
         category: "analysis",
-        imageSrc: "../../../../public/images/image2.png",
+        imageSrc: "/images/image2.png",
         registration: {
             startDate: "298347302984",
             endDate: "239847320984"

@@ -7,7 +7,7 @@ import { createUrlBuilder } from "../../../shared/lib/index.js";
 import { Card } from "../../../entities/card/index.js";
 
 import { AddToCart } from "../../../features/addToCart/index.js";
-import { runAddToCartFunctionality } from "../../../features/addToCart/model/index.js";
+import { AddToCartFunctionality } from "../../../features/addToCart/model/index.js";
 
 export class SliderModel {
     static instance;
@@ -39,53 +39,56 @@ export class SliderModel {
     }
 
     renderProductCards() {
-        (async () => {
-            const { productArray } = { ...getState() };
+        const { productArray } = { ...getState() };
 
-            const data = await this.fetchDataProductCards();
+        const swiperWrapper = this.node.querySelector(".swiper-wrapper");
 
-            const swiperWrapper = this.node.querySelector(".swiper-wrapper");
+        this.fetchDataProductCards()
+            .then(data => {
+                data.forEach(itemData => {
+                    const swiperSlide = document.createElement("div");
+                    swiperSlide.classList.add("swiper-slide");
 
-            data.forEach(itemData => {
-                const swiperSlide = document.createElement("div");
-                swiperSlide.classList.add("swiper-slide");
-
-                const addedToCartProps = () => {
-                    if (productArray.includes(itemData.idProduct.toString())) {
-                        return {
-                            idProduct: itemData.idProduct,
-                            active: true,
-                            label: "Уже в корзине"
+                    const addedToCartProps = () => {
+                        if (productArray.includes(itemData.idProduct.toString())) {
+                            return {
+                                idProduct: itemData.idProduct,
+                                active: true,
+                                label: "Уже в корзине"
+                            }
                         }
+                        return null;
                     }
-                    return null;
-                }
 
-                swiperSlide.innerHTML = Card({
-                    data: itemData,
-                    features: {
-                        addToCart: AddToCart(addedToCartProps(itemData) || {
-                            idProduct: itemData.idProduct,
-                            active: false,
-                            label: "В корзину"
-                        })
-                    },
-                    extraClasses: { page: "catalog" }
-                });
-                swiperWrapper.append(swiperSlide);
-                this.swiper.update();
+                    swiperSlide.innerHTML = Card({
+                        data: itemData,
+                        features: {
+                            addToCart: AddToCart(addedToCartProps(itemData) || {
+                                idProduct: itemData.idProduct,
+                                active: false,
+                                label: "В корзину"
+                            })
+                        },
+                        extraClasses: { page: "catalog" }
+                    });
+                    swiperWrapper.append(swiperSlide);
+                    this.swiper.update();
             })
-            runAddToCartFunctionality();
-        })()
+            new AddToCartFunctionality().run();
+        })
     }
 
     async fetchDataProductCards(){
         const url = createUrlBuilder("/home/productCards")
             .build()
 
-        const response = await fetch(url);
-        if (response.ok) {
-            return await response.json();
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error("Произошла ошибка: ", error);
         }
     }
 }

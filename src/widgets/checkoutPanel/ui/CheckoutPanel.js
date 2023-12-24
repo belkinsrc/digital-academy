@@ -4,7 +4,7 @@ export const CheckoutPanel = () => {
     const {
         getCN,
         extraClasses = {}
-    } = { ...commonComponentProps };
+    } = commonComponentProps;
 
     const baseClass = "checkout-panel";
 
@@ -41,9 +41,11 @@ export const CheckoutPanel = () => {
                         0 ₽
                     </p>
                 </div>
-                <button type="submit" class="${getClassName("button")} ${extraClasses.button}">
+                <a href="thanks.html" class="${getClassName("button")} 
+                        ${extraClasses.button}" 
+                        data-checkout-btn="">
                     Оформить заказ
-                </button>
+                </a>
             </form>
         </section>          
     `;
