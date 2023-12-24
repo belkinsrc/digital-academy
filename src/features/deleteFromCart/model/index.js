@@ -3,23 +3,32 @@ import { getState } from "../../../shared/api/zustand.js";
 import { CartProductsModel } from "../../../widgets/cartProducts/model/CartProductsModel.js";
 import { CheckoutPanelModel } from "../../../widgets/checkoutPanel/model/CheckoutPanelModel.js";
 
-export const runDeleteFromCartFunctionality = () => {
-    const { deleteProduct } = { ...getState() };
+export class DeleteFromCartFunctionality {
 
-    const cardsContainer = document.querySelector(".cart-products__container");
+    static selectors = {
+        cardsContainer: ".cart-products__container"
+    }
 
-    if (!cardsContainer) return;
+    constructor() {
+        this.cardsContainer = document.querySelector(DeleteFromCartFunctionality.selectors.cardsContainer);
+    }
 
-    cardsContainer.addEventListener("click", (event) => {
-        const target = event.target;
+    run() {
+        const { deleteProduct } = { ...getState() };
 
-        if (target && target.closest(".card__delete-from-cart")) {
-            const idProduct = target.closest(".card__delete-from-cart")
-                .getAttribute("data-delete-from-cart");
-            deleteProduct(idProduct);
+        if (!this.cardsContainer) return;
 
-            new CartProductsModel().renderProductCards();
-            new CheckoutPanelModel().renderOrderData();
-        }
-    })
+        this.cardsContainer.addEventListener("click", (event) => {
+            const target = event.target;
+
+            if (target && target.closest(".card__delete-from-cart")) {
+                const idProduct = target.closest(".card__delete-from-cart")
+                    .getAttribute("data-delete-from-cart");
+                deleteProduct(idProduct);
+
+                new CartProductsModel().renderProductCards();
+                new CheckoutPanelModel().renderOrderData();
+            }
+        })
+    }
 }

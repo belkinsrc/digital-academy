@@ -23,7 +23,7 @@ export const Index = () => {
           ${Header()}
            <main class="${getClassName()}">
                 <div class="${extraClasses.container}">
-                    <h2 class="${extraClasses.title}">
+                    <h2 class="${getClassName("title")} ${extraClasses.title}">
                         Популярные товары
                     </h2>
                     ${Slider()}

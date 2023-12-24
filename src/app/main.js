@@ -3,7 +3,7 @@ import { CartProductsModel } from "../widgets/cartProducts/model/CartProductsMod
 import { CheckoutPanelModel } from "../widgets/checkoutPanel/model/CheckoutPanelModel.js";
 import { SliderModel } from "../widgets/slider/model/SliderModel.js";
 
-import { runDeleteFromCartFunctionality } from "../features/deleteFromCart/model/index.js";
+import { DeleteFromCartFunctionality } from "../features/deleteFromCart/model/index.js";
 
 const runApp = async () => {
     const runWidgets = async () => {
@@ -14,7 +14,7 @@ const runApp = async () => {
         await Promise.all(Object.keys(import.meta.glob("../**/*.pcss", { "query": "?inline" })).map(path => import(`${path}`).then((module) => module?.default ?? module)))
     }
     const runFeatures = async () => {
-        runDeleteFromCartFunctionality();
+        new DeleteFromCartFunctionality().run()
     }
     switch (process.env.NODE_ENV) {
         case "development":
