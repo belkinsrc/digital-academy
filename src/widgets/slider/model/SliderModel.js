@@ -10,85 +10,85 @@ import { AddToCart } from "../../../features/addToCart/index.js";
 import { AddToCartFunctionality } from "../../../features/addToCart/model/index.js";
 
 export class SliderModel {
-    static instance;
+  static instance;
 
-    constructor() {
-        if (SliderModel.instance) {
-            return SliderModel.instance;
-        }
-
-        this.node = document.querySelector(".swiper-container");
-        SliderModel.instance = this;
-
-        if (SliderModel.instance.node) {
-            this.init();
-            this.renderProductCards();
-        }
+  constructor() {
+    if (SliderModel.instance) {
+      return SliderModel.instance;
     }
 
-    init() {
-        this.swiper = new Swiper(".swiper-container", {
-            slidesPerView: 4,
-            spaceBetween: 34,
-            loop: true,
-            navigation: {
-                nextEl: ".next-button",
-                prevEl: ".prev-button",
-            },
-        });
+    this.node = document.querySelector(".swiper-container");
+    SliderModel.instance = this;
+
+    if (SliderModel.instance.node) {
+      this.#init();
+      this.#renderProductCards();
     }
+  }
 
-    renderProductCards() {
-        const { productArray } = { ...getState() };
+  #init() {
+    this.swiper = new Swiper(".swiper-container", {
+      slidesPerView: 4,
+      spaceBetween: 34,
+      loop: true,
+      navigation: {
+        nextEl: ".next-button",
+        prevEl: ".prev-button",
+      },
+    });
+  }
 
-        const swiperWrapper = this.node.querySelector(".swiper-wrapper");
+  #renderProductCards() {
+    const { productArray } = getState();
 
-        this.fetchDataProductCards()
-            .then(data => {
-                data.forEach(itemData => {
-                    const swiperSlide = document.createElement("div");
-                    swiperSlide.classList.add("swiper-slide");
+    const swiperWrapper = this.node.querySelector(".swiper-wrapper");
 
-                    const addedToCartProps = () => {
-                        if (productArray.includes(itemData.idProduct.toString())) {
-                            return {
-                                idProduct: itemData.idProduct,
-                                active: true,
-                                label: "Уже в корзине"
-                            }
-                        }
-                        return null;
-                    }
+    this.#fetchDataProductCards()
+      .then(data => {
+        data.forEach(itemData => {
+          const swiperSlide = document.createElement("div");
+          swiperSlide.classList.add("swiper-slide");
 
-                    swiperSlide.innerHTML = Card({
-                        data: itemData,
-                        features: {
-                            addToCart: AddToCart(addedToCartProps(itemData) || {
-                                idProduct: itemData.idProduct,
-                                active: false,
-                                label: "В корзину"
-                            })
-                        },
-                        extraClasses: { page: "catalog" }
-                    });
-                    swiperWrapper.append(swiperSlide);
-                    this.swiper.update();
-            })
-            new AddToCartFunctionality().run();
-        })
-    }
-
-    async fetchDataProductCards(){
-        const url = createUrlBuilder("/home/productCards")
-            .build()
-
-        try {
-            const response = await fetch(url);
-            if (response.ok) {
-                return await response.json();
+          const addedToCartProps = () => {
+            if (productArray.includes(itemData.idProduct.toString())) {
+              return {
+                idProduct: itemData.idProduct,
+                active: true,
+                label: "Уже в корзине"
+              }
             }
-        } catch (error) {
-            console.error("Произошла ошибка: ", error);
-        }
+            return null;
+          }
+
+          swiperSlide.innerHTML = Card({
+            data: itemData,
+            features: {
+              addToCart: AddToCart(addedToCartProps(itemData) || {
+                idProduct: itemData.idProduct,
+                active: false,
+                label: "В корзину"
+              })
+            },
+            extraClasses: { page: "catalog" }
+          });
+          swiperWrapper.append(swiperSlide);
+          this.swiper.update();
+        })
+        new AddToCartFunctionality().run();
+      })
+  }
+
+  async #fetchDataProductCards() {
+    const url = createUrlBuilder("/home/productCards")
+      .build()
+
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.error("Произошла ошибка: ", error);
     }
+  }
 }

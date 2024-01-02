@@ -5,30 +5,30 @@ import { CheckoutPanelModel } from "../../../widgets/checkoutPanel/model/Checkou
 
 export class DeleteFromCartFunctionality {
 
-    static selectors = {
-        cardsContainer: ".cart-products__container"
-    }
+  static selectors = {
+    cardsContainer: ".cart-products__container"
+  }
 
-    constructor() {
-        this.cardsContainer = document.querySelector(DeleteFromCartFunctionality.selectors.cardsContainer);
-    }
+  constructor() {
+    this.cardsContainer = document.querySelector(DeleteFromCartFunctionality.selectors.cardsContainer);
+  }
 
-    run() {
-        const { deleteProduct } = { ...getState() };
+  run() {
+    const { deleteProduct } = getState();
 
-        if (!this.cardsContainer) return;
+    if (!this.cardsContainer) return;
 
-        this.cardsContainer.addEventListener("click", (event) => {
-            const target = event.target;
+    this.cardsContainer.addEventListener("click", (event) => {
+      const target = event.target;
 
-            if (target && target.closest(".card__delete-from-cart")) {
-                const idProduct = target.closest(".card__delete-from-cart")
-                    .getAttribute("data-delete-from-cart");
-                deleteProduct(idProduct);
+      if (target && target.closest(".card__delete-from-cart")) {
+        const idProduct = target.closest(".card__delete-from-cart")
+          .getAttribute("data-delete-from-cart");
+        deleteProduct(idProduct);
 
-                new CartProductsModel().renderProductCards();
-                new CheckoutPanelModel().renderOrderData();
-            }
-        })
-    }
+        new CartProductsModel().renderProductCards();
+        new CheckoutPanelModel().renderOrderData();
+      }
+    })
+  }
 }
