@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Все курсы",
+    "category": "all"
+  },
+  {
+    "name": "Веб-разработка",
+    "category": "frontend"
+  },
+  {
+    "name": "Бэкенд-разработка",
+    "category": "backend"
+  },
+  {
+    "name": "Мобильная разработка",
+    "category": "mobile"
+  },
+  {
+    "name": "Анализ данных",
+    "category": "analysis"
+  },
+  {
+    "name": "IT-инфраструктура",
+    "category": "infrastructure"
+  },
+  {
+    "name": "Управление разработкой",
+    "category": "management"
+  }
+]
