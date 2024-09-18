@@ -9,6 +9,11 @@ class Footer extends HTMLElement {
   }
 
   connectedCallback() {
+    this.render();
+    this.handleClick();
+  }
+
+  private render() {
     const { getCN, extraClasses } = commonComponentProps;
     const baseClass = 'footer';
 
@@ -36,9 +41,6 @@ class Footer extends HTMLElement {
         }
         .footer__contact-info {
           padding: 32px 0;
-        }
-        .footer__nav {
-
         }
         .footer__list {
           display: flex;
@@ -101,29 +103,29 @@ class Footer extends HTMLElement {
             <nav class="${getClassName('nav')}">
               <ul class="${getClassName('list')}">
                 <li class="${getClassName('item')}">
-                  <a href="#" class="${getClassName('link')}">
+                  <a href="/catalog" class="${getClassName('link')}" data-nav-link>
                     КУРСЫ
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="#" class="${getClassName('link')}">
+                  <a href="/about" class="${getClassName('link')}" data-nav-link>
                     О НАС
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="#" class="${getClassName('link')}">
+                  <a href="/reviews" class="${getClassName('link')}" data-nav-link>
                     ОТЗЫВЫ
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="#" class="${getClassName('link')}">
+                  <a href="/contacts" class="${getClassName('link')}" data-nav-link>
                     КОНТАКТЫ
                   </a>                        
                 </li>
               </ul>
             </nav>
               <span class="${getClassName('policy')}">
-                  Политика конфиденциальности
+                Политика конфиденциальности
               </span>
             </div>
             <hr>
@@ -138,18 +140,40 @@ class Footer extends HTMLElement {
               </div>
               <div class="${getClassName('email-block')}">
                 <span class="${getClassName('email-label')}">
-                    Эл. почта
+                  Эл. почта
                 </span>
                 <a href="mailto:info@d-element.ru" class="${getClassName(
                   'email-content'
                 )}">
-                    info@d-element.ru
+                  info@d-element.ru
                 </a>
               </div>
             </div>
           </div>
       </footer>
     `;
+  }
+
+  private handleClick() {
+    const links = this.shadow.querySelectorAll('[data-nav-link]')
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault()
+  
+        const target = event.currentTarget as HTMLAnchorElement
+        const { pathname: path } = new URL(target.href)
+        const currentPath = window.location.pathname
+  
+        if (currentPath !== path) {
+          const routeNavigateEvent = new CustomEvent('route-navigate', {
+            bubbles: true,
+            composed: true,
+            detail: path,
+          })
+          this.dispatchEvent(routeNavigateEvent)
+        }
+      })
+    })
   }
 }
 
