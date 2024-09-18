@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.mjs",
   "scripts": {
-    "start": "node server.mjs",
+    "start": "node ./src/server.mjs",
     "dev": "nodemon --exitcrash ./src/server.mjs"
   },
   "keywords": [],
