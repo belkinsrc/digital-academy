@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ICategory } from './types';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'http://localhost:5000/api';
 
 async function fetchAllCategories(): Promise<ICategory[]> {
   try {

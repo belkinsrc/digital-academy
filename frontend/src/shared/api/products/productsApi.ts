@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IProductFetchParams, IProductFetchBody } from './types';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'http://localhost:5000/api';
 
 async function fetchProducts(params: IProductFetchParams) {
   try {
