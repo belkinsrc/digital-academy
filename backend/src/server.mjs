@@ -14,7 +14,6 @@ const app = express()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-// Универсальная функция для чтения JSON файла
 async function readJsonFile(filePath) {
   try {
     const data = await fs.readFile(filePath, 'utf-8')
@@ -25,7 +24,6 @@ async function readJsonFile(filePath) {
   }
 }
 
-// Функция для последовательной инициализации продуктов
 async function initializeProducts() {
   try {
     const productsPath = path.join(__dirname, 'static', 'products.json')
@@ -54,7 +52,6 @@ async function initializeProducts() {
   }
 }
 
-// Функция для последовательной инициализации категорий
 async function initializeCategories() {
   try {
     const categoriesPath = path.join(__dirname, 'static', 'categories.json')
@@ -74,12 +71,11 @@ async function initializeCategories() {
   }
 }
 
-// Основной код приложения
 ;(async () => {
   try {
     await connectToDatabase()
-    await initializeProducts() // Инициализация продуктов
-    await initializeCategories() // Инициализация категорий
+    await initializeProducts() 
+    await initializeCategories()
 
     app.use(cors())
     app.use(express.json())
@@ -90,7 +86,6 @@ async function initializeCategories() {
       console.log(`Server is running on port ${PORT}`)
     })
 
-    // Отключение от базы данных при завершении процесса
     process.on('SIGINT', async () => {
       await disconnectFromDatabase()
       console.log('Disconnected from database')
