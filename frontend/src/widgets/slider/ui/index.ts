@@ -1,27 +1,27 @@
-import { useProductStore } from '@/shared/model';
-import { IProduct } from '@/shared/api';
-import { ProductCard } from '@/entities/product-card';
-import { AddToCart } from '@/features/add-to-cart';
+import { useProductStore } from '@/shared/model'
+import { IProduct } from '@/shared/api'
+import { ProductCard } from '@/entities/product-card'
+import { AddToCart } from '@/features/add-to-cart'
 
 class Slider extends HTMLElement {
-  private readonly shadow: ShadowRoot;
-  private products: IProduct[];
+  private readonly shadow: ShadowRoot
+  private products: IProduct[]
 
   constructor() {
-    super();
-    this.shadow = this.attachShadow({ mode: 'open' });
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
   }
 
   connectedCallback() {
-    this.getProducts();
-    this.render();
-    this.sliderNavigation();
+    this.getProducts()
+    this.render()
+    this.sliderNavigation()
 
     document.addEventListener(
       'setSliderProducts',
       this.handleSetSliderProducts.bind(this),
       { once: true }
-    );
+    )
   }
 
   private render() {
@@ -67,80 +67,80 @@ class Slider extends HTMLElement {
             </svg>
         </div>
       </div>
-    `;
+    `
   }
 
   private getProducts() {
     const getSliderProductsEvent = new CustomEvent('getSliderProducts', {
       bubbles: true,
       composed: true,
-    });
-    this.dispatchEvent(getSliderProductsEvent);
+    })
+    this.dispatchEvent(getSliderProductsEvent)
   }
 
   private renderProducts() {
-    if (!this.products) return;
+    if (typeof this.products === 'object' && this.products.length > 0) {
+      const swiperContainer = this.shadow.querySelector('swiper-container')
 
-    const swiperContainer = this.shadow.querySelector('swiper-container');
+      swiperContainer!.innerHTML = ''
 
-    swiperContainer!.innerHTML = '';
+      this.products.forEach((product) => {
+        const swiperSlide = document.createElement('swiper-slide')
 
-    this.products.forEach((product) => {
-      const swiperSlide = document.createElement('swiper-slide');
+        const productCardTag = new ProductCard(product, { page: 'catalog' })
+        const addToCartParams = this.getAddToCartParams(product._id)
+        const addToCartTag = new AddToCart(addToCartParams)
+        addToCartTag.slot = 'children'
+        productCardTag.appendChild(addToCartTag)
+        swiperSlide.appendChild(productCardTag)
 
-      const productCardTag = new ProductCard(product, { page: 'catalog' });
-      const addToCartParams = this.getAddToCartParams(product._id);
-      const addToCartTag = new AddToCart(addToCartParams);
-      addToCartTag.slot = 'children';
-      productCardTag.appendChild(addToCartTag);
-      swiperSlide.appendChild(productCardTag);
-
-      swiperContainer.appendChild(swiperSlide);
-    });
+        swiperContainer.appendChild(swiperSlide)
+      })
+    }
   }
 
   private getAddToCartParams(productId: string) {
-    const { getState } = useProductStore;
-    const { products } = getState();
+    const { getState } = useProductStore
+    const { products } = getState()
     const params = {
       label: 'В корзину',
       active: true,
       productId: productId,
-    };
-    if (products.includes(productId)) {
-      params.label = 'Уже в корзине';
-      params.active = false;
-      return params;
     }
-    return params;
+    if (products.includes(productId)) {
+      params.label = 'Уже в корзине'
+      params.active = false
+      return params
+    }
+    return params
   }
 
   private handleSetSliderProducts(event: Event) {
-    const customEvent = event as CustomEvent<IProduct[]>;
-    this.products = customEvent.detail;
-    this.renderProducts();
+    const customEvent = event as CustomEvent<IProduct[]>
+    this.products = customEvent.detail
+    this.renderProducts()
   }
 
   private sliderNavigation() {
-    const swiperEl = this.shadow.querySelector('swiper-container');
-    const prevBtn = this.shadow.querySelector('.prev-button');
-    const nextBtn = this.shadow.querySelector('.next-button');
+    const swiperEl = this.shadow.querySelector('swiper-container')
+    const prevBtn = this.shadow.querySelector('.prev-button')
+    const nextBtn = this.shadow.querySelector('.next-button')
 
     prevBtn.addEventListener('click', () => {
-      swiperEl.swiper.slidePrev();
-    });
+      swiperEl.swiper.slidePrev()
+    })
 
     nextBtn.addEventListener('click', () => {
-      swiperEl.swiper.slideNext();
-    });
+      swiperEl.swiper.slideNext()
+    })
 
     const params = {
       slidesPerView: 'auto',
       spaceBetween: 30,
-    };
+    }
 
-    Object.assign(swiperEl, params);
+    Object.assign(swiperEl, params)
   }
 }
 
-export { Slider };
+export { Slider }

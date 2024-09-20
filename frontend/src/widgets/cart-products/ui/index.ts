@@ -95,29 +95,31 @@ class CartProducts extends HTMLElement {
   }
 
   private renderProducts() {
-    const container = this.shadow.querySelector(
-      '[data-cart-products-container]'
-    )
-    container.innerHTML = ''
+    if (this.products && typeof this.products === 'object') {
+      const container = this.shadow.querySelector(
+        '[data-cart-products-container]'
+      )
+      container.innerHTML = ''
 
-    if (this.products.length === 0) {
-      container.innerHTML = `
-        <h2 class="${commonComponentProps.getCN('cart-products', 'empty')}">
-          Корзина пуста :(
-        </h2>`
-      return
+      if (this.products.length === 0) {
+        container.innerHTML = `
+          <h2 class="${commonComponentProps.getCN('cart-products', 'empty')}">
+            Корзина пуста :(
+          </h2>`
+        return
+      }
+
+      this.products.forEach((product) => {
+        const productCard = new ProductCard(product, { page: 'cart' })
+        const deleteBtn = new DeleteFromCart(product._id)
+        const courseInfo = new CourseInfo()
+        deleteBtn.slot = 'deleteBtn'
+        courseInfo.slot = 'children'
+        productCard.appendChild(deleteBtn)
+        productCard.appendChild(courseInfo)
+        container.appendChild(productCard)
+      })
     }
-
-    this.products.forEach((product) => {
-      const productCard = new ProductCard(product, { page: 'cart' })
-      const deleteBtn = new DeleteFromCart(product._id)
-      const courseInfo = new CourseInfo()
-      deleteBtn.slot = 'deleteBtn'
-      courseInfo.slot = 'children'
-      productCard.appendChild(deleteBtn)
-      productCard.appendChild(courseInfo)
-      container.appendChild(productCard)
-    })
   }
 
   private getProducts() {

@@ -129,20 +129,20 @@ class ProductFilter extends HTMLElement {
   }
 
   private renderProducts() {
-    if (!this.products) return
+    if (typeof this.products === 'object' && this.products.length > 0) {
+      const cardsContainer = this.shadow.querySelector('.product-filter__cards')
 
-    const cardsContainer = this.shadow.querySelector('.product-filter__cards')
+      cardsContainer!.innerHTML = ''
 
-    cardsContainer!.innerHTML = ''
-
-    this.products.forEach((product) => {
-      const productCardTag = new ProductCard(product, { page: 'catalog' })
-      const addToCartParams = this.getAddToCartParams(product._id)
-      const addToCartTag = new AddToCart(addToCartParams)
-      addToCartTag.slot = 'children'
-      productCardTag.appendChild(addToCartTag)
-      cardsContainer?.appendChild(productCardTag)
-    })
+      this.products.forEach((product) => {
+        const productCardTag = new ProductCard(product, { page: 'catalog' })
+        const addToCartParams = this.getAddToCartParams(product._id)
+        const addToCartTag = new AddToCart(addToCartParams)
+        addToCartTag.slot = 'children'
+        productCardTag.appendChild(addToCartTag)
+        cardsContainer?.appendChild(productCardTag)
+      })
+    }
   }
 
   private getAddToCartParams(productId: string) {
