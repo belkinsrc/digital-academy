@@ -1,25 +1,25 @@
-import { commonComponentProps } from '@/shared/lib';
+import { commonComponentProps } from '@/shared/lib'
 
 class Footer extends HTMLElement {
-  private shadow: ShadowRoot;
+  private shadow: ShadowRoot
 
   constructor() {
-    super();
-    this.shadow = this.attachShadow({ mode: 'open' });
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
   }
 
   connectedCallback() {
-    this.render();
-    this.handleClick();
+    this.render()
+    this.handleClick()
   }
 
   private render() {
-    const { getCN, extraClasses } = commonComponentProps;
-    const baseClass = 'footer';
+    const { getCN, extraClasses } = commonComponentProps
+    const baseClass = 'footer'
 
     const getClassName = (elem = '', mod = {}) => {
-      return getCN(baseClass, elem, mod);
-    };
+      return getCN(baseClass, elem, mod)
+    }
 
     this.shadow.innerHTML = `
       <style>
@@ -39,7 +39,10 @@ class Footer extends HTMLElement {
           align-items: center;
           padding: 40px 0;
         }
-        .footer__contact-info {
+        .footer__contact-section {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           padding: 32px 0;
         }
         .footer__list {
@@ -60,6 +63,14 @@ class Footer extends HTMLElement {
           font-weight: 600;
           line-height: 24px;
           color: #222222;
+        }
+        .footer__author small {
+          font-size: 15px;
+        }
+        .footer__author a {
+          text-decoration: none;
+          color: black;
+          font-weight: bold;
         }
         .footer hr {
           border: 1px solid rgba(0, 0, 0, 0.3)
@@ -103,22 +114,30 @@ class Footer extends HTMLElement {
             <nav class="${getClassName('nav')}">
               <ul class="${getClassName('list')}">
                 <li class="${getClassName('item')}">
-                  <a href="/catalog" class="${getClassName('link')}" data-nav-link>
+                  <a href="/catalog" class="${getClassName(
+                    'link'
+                  )}" data-nav-link>
                     КУРСЫ
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="/about" class="${getClassName('link')}" data-nav-link>
+                  <a href="/about" class="${getClassName(
+                    'link'
+                  )}" data-nav-link>
                     О НАС
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="/reviews" class="${getClassName('link')}" data-nav-link>
+                  <a href="/reviews" class="${getClassName(
+                    'link'
+                  )}" data-nav-link>
                     ОТЗЫВЫ
                   </a>                        
                 </li>
                 <li class="${getClassName('item')}">
-                  <a href="/contacts" class="${getClassName('link')}" data-nav-link>
+                  <a href="/contacts" class="${getClassName(
+                    'link'
+                  )}" data-nav-link>
                     КОНТАКТЫ
                   </a>                        
                 </li>
@@ -129,29 +148,38 @@ class Footer extends HTMLElement {
               </span>
             </div>
             <hr>
-            <div class="${getClassName('contact-info')}">
-              <div class="${getClassName('address-block')}">
-                <span class="${getClassName('address-label')}">
-                  Наш адрес
-                </span>
-                <p class="${getClassName('address-content')}">
-                  г. Челябинск, ул. Лесопарковая 5/2
-                </p>
+            <div class="${getClassName('contact-section')}">
+              <div class="${getClassName('contact-info')}">
+                <div class="${getClassName('address-block')}">
+                  <span class="${getClassName('address-label')}">
+                    Наш адрес
+                  </span>
+                  <p class="${getClassName('address-content')}">
+                    г. Челябинск, ул. Лесопарковая 5/2
+                  </p>
+                </div>
+                <div class="${getClassName('email-block')}">
+                  <span class="${getClassName('email-label')}">
+                    Эл. почта
+                  </span>
+                  <a href="mailto:info@d-element.ru" class="${getClassName(
+                    'email-content'
+                  )}">
+                    info@d-element.ru
+                  </a>
+                </div>
               </div>
-              <div class="${getClassName('email-block')}">
-                <span class="${getClassName('email-label')}">
-                  Эл. почта
-                </span>
-                <a href="mailto:info@d-element.ru" class="${getClassName(
-                  'email-content'
-                )}">
-                  info@d-element.ru
-                </a>
+              <div class="${getClassName('author')}">
+                <small>Built with passion by 
+                  <a href="https://github.com/belkinsrc" target="_blank">
+                    Nikita Belkin
+                  </a>
+                </small>
               </div>
             </div>
           </div>
       </footer>
-    `;
+    `
   }
 
   private handleClick() {
@@ -159,11 +187,11 @@ class Footer extends HTMLElement {
     links.forEach((link) => {
       link.addEventListener('click', (event) => {
         event.preventDefault()
-  
+
         const target = event.currentTarget as HTMLAnchorElement
         const { pathname: path } = new URL(target.href)
         const currentPath = window.location.pathname
-  
+
         if (currentPath !== path) {
           const routeNavigateEvent = new CustomEvent('route-navigate', {
             bubbles: true,
@@ -177,4 +205,4 @@ class Footer extends HTMLElement {
   }
 }
 
-export { Footer };
+export { Footer }
