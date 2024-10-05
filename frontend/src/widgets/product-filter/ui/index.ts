@@ -5,24 +5,19 @@ import { FilterCategory } from '@/entities/filter-category'
 import { ProductCard } from '@/entities/product-card'
 import { IFilterCategory } from '@/entities/filter-category/types'
 import { AddToCart } from '@/features/add-to-cart'
+import { ProductFilterEventHandler } from '../handlers'
 
 class ProductFilter extends HTMLElement {
   private readonly shadow: ShadowRoot
-  private categories!: ICategory[]
-  private products!: IProduct[]
-  private activeCategory!: string
-  private handleSetFilterCategoriesBound: (event: Event) => void
-  private handleSetFilterProductsBound: (event: Event) => void
-  private handleSetFilterActiveCategoryBound: (event: Event) => void
+  private readonly eventHandler: ProductFilterEventHandler
+  public categories!: ICategory[]
+  public products!: IProduct[]
+  public activeCategory!: string
 
   constructor() {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.handleSetFilterCategoriesBound =
-      this.handleSetFilterCategories.bind(this)
-    this.handleSetFilterProductsBound = this.handleSetFilterProducts.bind(this)
-    this.handleSetFilterActiveCategoryBound =
-      this.handleSetFilterActiveCategory.bind(this)
+    this.eventHandler = new ProductFilterEventHandler(this)
   }
 
   connectedCallback() {
@@ -30,33 +25,15 @@ class ProductFilter extends HTMLElement {
     this.getProducts()
     this.render()
 
-    document.addEventListener(
-      'setFilterCategories',
-      this.handleSetFilterCategoriesBound
-    )
-    document.addEventListener(
-      'setFilterProducts',
-      this.handleSetFilterProductsBound
-    )
-    document.addEventListener(
-      'setFilterActiveCategory',
-      this.handleSetFilterActiveCategoryBound
-    )
+    document.addEventListener('setFilterCategories', this.eventHandler)
+    document.addEventListener('setFilterProducts', this.eventHandler)
+    document.addEventListener('setFilterActiveCategory', this.eventHandler)
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      'setFilterCategories',
-      this.handleSetFilterCategoriesBound
-    )
-    document.removeEventListener(
-      'setFilterProducts',
-      this.handleSetFilterProductsBound
-    )
-    document.removeEventListener(
-      'setFilterActiveCategory',
-      this.handleSetFilterActiveCategoryBound
-    )
+    document.removeEventListener('setFilterCategories', this.eventHandler)
+    document.removeEventListener('setFilterProducts', this.eventHandler)
+    document.removeEventListener('setFilterActiveCategory', this.eventHandler)
   }
 
   private render() {
@@ -99,7 +76,7 @@ class ProductFilter extends HTMLElement {
     `
   }
 
-  private renderCategories() {
+  public renderCategories() {
     if (!this.categories) return
 
     const sidebar = this.shadow.querySelector('.product-filter__sidebar')
@@ -111,7 +88,7 @@ class ProductFilter extends HTMLElement {
     })
   }
 
-  private markActiveCategory() {
+  public markActiveCategory() {
     if (!this.activeCategory) return
 
     const categoriesTags = this.shadow.querySelectorAll(
@@ -128,7 +105,7 @@ class ProductFilter extends HTMLElement {
     })
   }
 
-  private renderProducts() {
+  public renderProducts() {
     if (typeof this.products === 'object' && this.products.length > 0) {
       const cardsContainer = this.shadow.querySelector('.product-filter__cards')
 
@@ -175,24 +152,6 @@ class ProductFilter extends HTMLElement {
       composed: true,
     })
     this.dispatchEvent(getFilterProductsEvent)
-  }
-
-  private handleSetFilterCategories(event: Event) {
-    const customEvent = event as CustomEvent<ICategory[]>
-    this.categories = customEvent.detail
-    this.renderCategories()
-  }
-
-  private handleSetFilterProducts(event: Event) {
-    const customEvent = event as CustomEvent<IProduct[]>
-    this.products = customEvent.detail
-    this.renderProducts()
-  }
-
-  private handleSetFilterActiveCategory(event: Event) {
-    const customEvent = event as CustomEvent<string>
-    this.activeCategory = customEvent.detail
-    this.markActiveCategory()
   }
 }
 
