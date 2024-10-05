@@ -1,16 +1,16 @@
 import { commonComponentProps } from '@/shared/lib'
 import { ICheckoutPanelInfo } from '../types'
+import { CheckoutPanelEventHandler } from '../handlers'
 
 class CheckoutPanel extends HTMLElement {
   private readonly shadow: ShadowRoot
-  private info: ICheckoutPanelInfo
-  private handleSetCheckoutPanelInfoBound: (event: Event) => void
+  private readonly eventHandler: CheckoutPanelEventHandler
+  public info: ICheckoutPanelInfo
 
   constructor() {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.handleSetCheckoutPanelInfoBound =
-      this.handleSetCheckoutPanelInfo.bind(this)
+    this.eventHandler = new CheckoutPanelEventHandler(this)
   }
 
   connectedCallback() {
@@ -18,17 +18,11 @@ class CheckoutPanel extends HTMLElement {
     this.render()
     this.handlePlaceOrder()
 
-    document.addEventListener(
-      'setCheckoutPanelInfo',
-      this.handleSetCheckoutPanelInfoBound
-    )
+    document.addEventListener('setCheckoutPanelInfo', this.eventHandler)
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      'setCheckoutPanelInfo',
-      this.handleSetCheckoutPanelInfoBound
-    )
+    document.removeEventListener('setCheckoutPanelInfo', this.eventHandler)
   }
 
   private render() {
@@ -174,7 +168,7 @@ class CheckoutPanel extends HTMLElement {
     `
   }
 
-  private renderInfo() {
+  public renderInfo() {
     const productCountElem = this.shadow.querySelector('[data-product-count]')
     const totalPriceElemts = this.shadow.querySelectorAll('[data-total-price]')
 
@@ -187,7 +181,7 @@ class CheckoutPanel extends HTMLElement {
     })
   }
 
-  private updateButton() {
+  public updateButton() {
     const { productCount } = this.info
     const btn = this.shadow.querySelector('[data-checkout-btn]')
 
@@ -204,14 +198,6 @@ class CheckoutPanel extends HTMLElement {
       composed: true,
     })
     this.dispatchEvent(getCheckoutPanelInfoEvent)
-  }
-
-  private handleSetCheckoutPanelInfo(event: Event) {
-    const customEvent = event as CustomEvent<ICheckoutPanelInfo>
-    const info = customEvent.detail
-    this.info = info
-    this.renderInfo()
-    this.updateButton()
   }
 
   private handlePlaceOrder() {
