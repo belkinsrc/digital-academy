@@ -3,16 +3,17 @@ import { IProduct } from '@/shared/api'
 import { CourseInfo } from '@/shared/ui'
 import { ProductCard } from '@/entities/product-card'
 import { DeleteFromCart } from '@/features/delete-from-cart'
+import { CartProductsEventHandler } from '../handlers'
 
 class CartProducts extends HTMLElement {
   private readonly shadow: ShadowRoot
-  private products: IProduct[]
-  private handleSetCartProductsBound: (event: Event) => void
+  private readonly eventHandler: CartProductsEventHandler
+  public products: IProduct[]
 
   constructor() {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
-    this.handleSetCartProductsBound = this.handleSetCartProducts.bind(this)
+    this.eventHandler = new CartProductsEventHandler(this)
   }
 
   connectedCallback() {
@@ -20,17 +21,11 @@ class CartProducts extends HTMLElement {
     this.render()
     this.handleClickOnContinueShoppingLink()
 
-    document.addEventListener(
-      'setCartProducts',
-      this.handleSetCartProductsBound
-    )
+    document.addEventListener('setCartProducts', this.eventHandler)
   }
 
   disconnectedCallback() {
-    document.removeEventListener(
-      'setCartProducts',
-      this.handleSetCartProductsBound
-    )
+    document.removeEventListener('setCartProducts', this.eventHandler)
   }
 
   private render() {
@@ -94,7 +89,7 @@ class CartProducts extends HTMLElement {
     `
   }
 
-  private renderProducts() {
+  public renderProducts() {
     if (this.products && typeof this.products === 'object') {
       const container = this.shadow.querySelector(
         '[data-cart-products-container]'
@@ -145,13 +140,6 @@ class CartProducts extends HTMLElement {
       })
       this.dispatchEvent(routeNavigateEvent)
     })
-  }
-
-  private handleSetCartProducts(event: Event) {
-    const customEvent = event as CustomEvent<IProduct[]>
-    const products = customEvent.detail
-    this.products = products
-    this.renderProducts()
   }
 }
 
