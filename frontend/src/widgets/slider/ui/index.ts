@@ -2,14 +2,17 @@ import { useProductStore } from '@/shared/model'
 import { IProduct } from '@/shared/api'
 import { ProductCard } from '@/entities/product-card'
 import { AddToCart } from '@/features/add-to-cart'
+import { SliderEventHandler } from '../handlers'
 
 class Slider extends HTMLElement {
   private readonly shadow: ShadowRoot
-  private products: IProduct[]
+  private readonly eventHandler: SliderEventHandler
+  public products: IProduct[]
 
   constructor() {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.eventHandler = new SliderEventHandler(this)
   }
 
   connectedCallback() {
@@ -17,11 +20,11 @@ class Slider extends HTMLElement {
     this.render()
     this.sliderNavigation()
 
-    document.addEventListener(
-      'setSliderProducts',
-      this.handleSetSliderProducts.bind(this),
-      { once: true }
-    )
+    document.addEventListener('setSliderProducts', this.eventHandler)
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('setSliderProducts', this.eventHandler)
   }
 
   private render() {
@@ -78,7 +81,7 @@ class Slider extends HTMLElement {
     this.dispatchEvent(getSliderProductsEvent)
   }
 
-  private renderProducts() {
+  public renderProducts() {
     if (typeof this.products === 'object' && this.products.length > 0) {
       const swiperContainer = this.shadow.querySelector('swiper-container')
 
@@ -113,12 +116,6 @@ class Slider extends HTMLElement {
       return params
     }
     return params
-  }
-
-  private handleSetSliderProducts(event: Event) {
-    const customEvent = event as CustomEvent<IProduct[]>
-    this.products = customEvent.detail
-    this.renderProducts()
   }
 
   private sliderNavigation() {
